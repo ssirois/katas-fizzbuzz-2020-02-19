@@ -1,14 +1,24 @@
+builddir = ./build
+srcdir = ./src
+testdir = ./tests
+
 all: test
 
-.PHONY: clean
-clean:
-	rm -rf test_fizzbuzz.o test_fizzbuzz
+.PHONY: buildclean
+buildclean:
+	rm -rf $(builddir)/
 
-test_fizzbuzz.o: test_fizzbuzz.c
-	gcc -c test_fizzbuzz.c
+$(builddir):
+	mkdir $(builddir)
 
-test_fizzbuzz: test_fizzbuzz.o
-	gcc test_fizzbuzz.o -lcgreen -o test_fizzbuzz
+$(builddir)/fizzbuzz.o: $(builddir) $(srcdir)/fizzbuzz.c
+	gcc -c $(srcdir)/fizzbuzz.c -o $@
 
-test: test_fizzbuzz
-	./test_fizzbuzz
+$(builddir)/test_fizzbuzz.o: $(builddir) $(builddir)/fizzbuzz.o $(testdir)/test_fizzbuzz.c
+	gcc -I$(srcdir) -c $(testdir)/test_fizzbuzz.c -o $@
+
+$(builddir)/test_fizzbuzz: $(builddir)/test_fizzbuzz.o
+	gcc $(builddir)/test_fizzbuzz.o $(builddir)/fizzbuzz.o -lcgreen -o $@
+
+test: $(builddir)/test_fizzbuzz
+	./$(builddir)/test_fizzbuzz

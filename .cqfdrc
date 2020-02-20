@@ -10,11 +10,11 @@
 org='bidouilleur'
 name='fizzbuzz'
 
-[clean]
-command='make clean'
+[buildclean]
+command='make buildclean'
 
 [build]
 command='LD_LIBRARY_PATH=/usr/local/lib make'
 files=
-flavors='clean'
+flavors='buildclean'
 
